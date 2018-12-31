@@ -25,6 +25,19 @@ public class KochGenerator : MonoBehaviour
     [SerializeField]
     protected Initiator initiator = new Initiator();
 
+    public struct LineSegment
+    {
+        public Vector3 StartPostition { get; set; }
+        public Vector3 EndPosition { get; set; }
+        public Vector3 Direction { get; set; }
+        public float Length { get; set; }
+    }
+
+    [SerializeField] // for the shape that will be created at each line
+    protected AnimationCurve generator;
+    protected Keyframe[] keys;
+    protected int generationCount;
+
     protected int initiatorPointAmount; // number of vertex
 
     private Vector3[] initiatorPoint; // vertex positions
@@ -36,11 +49,17 @@ public class KochGenerator : MonoBehaviour
     protected float initiatorSize = 1f; // scale shape
 
     protected Vector3[] position;
+    protected Vector3[] targetPosition;
+    private List<LineSegment> lineSegments;
 
     private void Awake()
     {
         GetInitiatorPoints();
+        //a assign list and arrays
         position = new Vector3[initiatorPointAmount + 1];
+        targetPosition = new Vector3[initiatorPointAmount + 1];
+        lineSegments = new List<LineSegment>();
+        keys = generator.keys;
 
         // initiate private variables
         rotateVector = Quaternion.AngleAxis(initialRotation, rotateAxis) * rotateVector; // put initial rotation to allign with selected axis
@@ -53,6 +72,66 @@ public class KochGenerator : MonoBehaviour
         }
 
         position[initiatorPointAmount] = position[0];
+        targetPosition = position;
+    }
+
+    protected void KochGenerate(Vector3[] positions, bool outWards, float generatorMultiplier)
+    {
+        // creating lineSegments
+        lineSegments.Clear();
+        for (int i = 0; i < position.Length-1; i++)
+        {
+            LineSegment line = new LineSegment();
+            line.StartPostition = positions[i];
+            if (i == positions.Length-1) // last position
+            {
+                line.EndPosition = positions[0];
+            }
+            else
+            {
+                line.EndPosition = positions[i + 1];
+            }
+            line.Direction = (line.EndPosition - line.StartPostition).normalized;
+            line.Length = Vector3.Distance(line.EndPosition, line.StartPostition);
+
+            lineSegments.Add(line);
+        }
+
+        // add line segments ponts to a point array
+        List<Vector3> newPos = new List<Vector3>();
+        List<Vector3> targetPos = new List<Vector3>();
+
+        for (int i = 0; i < lineSegments.Count; i++)
+        {
+            newPos.Add(lineSegments[i].StartPostition); // add first
+            targetPos.Add(lineSegments[i].StartPostition);
+            // loop on all keypoints created from generator
+            for (int j = 1; j < keys.Length-1; j++)
+            {
+                float moveAmount = lineSegments[i].Length * keys[j].time; // time is x-axis
+                float heightAmount = (lineSegments[i].Length * keys[j].value) * generatorMultiplier; // value is y_axis
+                Vector3 movePos = lineSegments[i].StartPostition + (lineSegments[i].Direction * moveAmount);
+                Vector3 direction;
+                if (outWards)
+                {
+                    direction = Quaternion.AngleAxis(-90, rotateAxis) * lineSegments[i].Direction;
+                }
+                else
+                {
+                    direction = Quaternion.AngleAxis(90, rotateAxis) * lineSegments[i].Direction;
+                }
+                newPos.Add(movePos);
+                targetPos.Add(movePos + (direction * heightAmount)); 
+            }
+        }
+        newPos.Add(lineSegments[0].StartPostition); // add last
+        targetPos.Add(lineSegments[0].StartPostition);
+        position = new Vector3[newPos.Count];
+        targetPosition = new Vector3[targetPos.Count];
+        position = newPos.ToArray();
+        targetPosition = targetPos.ToArray();
+
+        generationCount++;
     }
 
     private void GetInitiatorPoints()
