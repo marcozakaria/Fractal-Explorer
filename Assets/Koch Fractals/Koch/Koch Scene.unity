@@ -248,11 +248,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 654329877}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25f7bbff228ef934f875b4fa0133a1d5, type: 3}
+  m_Script: {fileID: 11500000, guid: bf738dfa94a3df341a333f687959fd4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   axiss: 0
-  initiator: 3
+  initiator: 1
   generator:
     serializedVersion: 2
     m_Curve:
@@ -264,7 +264,7 @@ MonoBehaviour:
       tangentMode: 69
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.33333334
+      outWeight: 0
     - serializedVersion: 3
       time: 0.33
       value: 0
@@ -295,9 +295,9 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 0
-      inSlope: -0
+      inSlope: 0
       outSlope: 0
-      tangentMode: 69
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0
@@ -413,8 +413,8 @@ Camera:
   m_GameObject: {fileID: 1018270072}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -486,7 +486,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2081248237}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab18f3440fc9dc24285de6f1b9a56271, type: 3}
+  m_Script: {fileID: 11500000, guid: e2d3968f21c0b264bbfdab3d0de08328, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   axiss: 0
@@ -499,7 +499,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   useBezierCurve: 0
   bezierVertexCount: 0
-  initiatorSize: 4
+  initiatorSize: 1
 --- !u!4 &2081248239
 Transform:
   m_ObjectHideFlags: 0
