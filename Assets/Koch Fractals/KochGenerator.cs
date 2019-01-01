@@ -25,7 +25,7 @@ public class KochGenerator : MonoBehaviour
     [SerializeField]
     protected Initiator initiator = new Initiator();
 
-    public struct LineSegment
+    public struct LineSegment // line parameters
     {
         public Vector3 StartPostition { get; set; }
         public Vector3 EndPosition { get; set; }
@@ -37,6 +37,12 @@ public class KochGenerator : MonoBehaviour
     protected AnimationCurve generator;
     protected Keyframe[] keys;
     protected int generationCount;
+
+    [SerializeField]
+    protected bool useBezierCurve;
+    [SerializeField]
+    [Range(8,24)]
+    protected int bezierVertexCount;
 
     protected int initiatorPointAmount; // number of vertex
 
@@ -50,7 +56,28 @@ public class KochGenerator : MonoBehaviour
 
     protected Vector3[] position;
     protected Vector3[] targetPosition;
+    protected Vector3[] bezierPosition;
     private List<LineSegment> lineSegments;
+
+    protected Vector3[] BezierCurve(Vector3[] points,int vertexCount)
+    {
+        var pointList = new List<Vector3>();
+        for (int i = 0; i < points.Length; i+=2)
+        {
+            if (i+2 <= points.Length-1) // not last
+            {
+                for (float ratio = 0; ratio <= 1; ratio+=1.0f/vertexCount)
+                {
+                    var tangentLineVertex1 = Vector3.Lerp(points[i], points[i + 1], ratio);
+                    var tangentLineVertex2 = Vector3.Lerp(points[i + 1], points[i + 2], ratio);
+                    var bezierPoint = Vector3.Lerp(tangentLineVertex1, tangentLineVertex2, ratio);
+                    pointList.Add(bezierPoint);
+                }
+            }
+        }
+
+        return pointList.ToArray();
+    }
 
     private void Awake()
     {
@@ -97,7 +124,7 @@ public class KochGenerator : MonoBehaviour
             lineSegments.Add(line);
         }
 
-        // add line segments ponts to a point array
+        // add line segments points to a point array
         List<Vector3> newPos = new List<Vector3>();
         List<Vector3> targetPos = new List<Vector3>();
 
@@ -128,6 +155,9 @@ public class KochGenerator : MonoBehaviour
         targetPos.Add(lineSegments[0].StartPostition);
         position = new Vector3[newPos.Count];
         targetPosition = new Vector3[targetPos.Count];
+
+        bezierPosition = BezierCurve(targetPosition, bezierVertexCount);
+
         position = newPos.ToArray();
         targetPosition = targetPos.ToArray();
 

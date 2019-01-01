@@ -304,9 +304,11 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  useBezierCurve: 0
+  bezierVertexCount: 8
   initiatorSize: 4
   lerpAmount: 0
-  generateMultiplier: 1
+  generateMultiplier: 2
 --- !u!1 &931662462
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,6 +497,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  useBezierCurve: 0
+  bezierVertexCount: 0
   initiatorSize: 4
 --- !u!4 &2081248239
 Transform:

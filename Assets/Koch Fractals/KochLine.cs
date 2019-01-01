@@ -32,7 +32,19 @@ public class KochLine : KochGenerator
                 lerpPosition[i] = Vector3.Lerp(position[i], targetPosition[i], lerpAmount);
             }
 
-            lineRenderer.SetPositions(lerpPosition);
+            if (useBezierCurve)
+            {
+                bezierPosition = BezierCurve(lerpPosition, bezierVertexCount);
+                lineRenderer.positionCount = bezierPosition.Length;
+                lineRenderer.SetPositions(bezierPosition);
+            }
+            else
+            {
+                lineRenderer.positionCount = lerpPosition.Length;
+                lineRenderer.SetPositions(lerpPosition);
+            }
+
+            
         }
 
         if (Input.GetKeyUp(KeyCode.O))
