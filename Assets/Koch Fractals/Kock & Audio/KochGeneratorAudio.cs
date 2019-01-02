@@ -231,7 +231,7 @@ public class KochGeneratorAudio : MonoBehaviour
         }
     }
 
-    public float lengthOfSides;
+    public float lengthOfSides; // length in scene view
 
     private void OnDrawGizmos()
     {

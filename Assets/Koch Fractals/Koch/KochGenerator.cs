@@ -82,6 +82,11 @@ public class KochGenerator : MonoBehaviour
     private void Awake()
     {
         GetInitiatorPoints();
+        UpdateShapeVariables();
+    }
+
+    protected void UpdateShapeVariables()
+    {
         //a assign list and arrays
         position = new Vector3[initiatorPointAmount + 1];
         targetPosition = new Vector3[initiatorPointAmount + 1];
@@ -215,6 +220,11 @@ public class KochGenerator : MonoBehaviour
                 rotateAxis = new Vector3(1, 0, 0); // rotate angle on y-axis
                 break;
         }
+    }
+
+    public void GetInitiatorPointsPublic()
+    {
+        GetInitiatorPoints();
     }
 
     private void OnDrawGizmos()
